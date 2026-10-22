@@ -1,0 +1,400 @@
+.promo-studio {
+  min-height: 100dvh;
+  background: var(--paper, #f6f2e8);
+  color: var(--ink, #303b2e);
+  padding-bottom: 45px;
+}
+.promo-header {
+  margin: 0 5%;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #d9ddce;
+}
+.promo-header > a {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.promo-header > span:nth-child(2) {
+  font-family: var(--serif, Georgia, serif);
+  font-size: 20px;
+  letter-spacing: -0.6px;
+}
+.promo-header i {
+  color: #bd4934;
+}
+.promo-demo-label {
+  border: 1px solid #c5cbae;
+  border-radius: 3px;
+  padding: 5px 8px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #768365;
+}
+.promo-intro {
+  text-align: center;
+  padding: 38px 20px 10px;
+}
+.promo-intro > .eyebrow {
+  font-size: 8px;
+}
+.promo-intro h1 {
+  font-family: var(--serif, Georgia, serif);
+  font-size: 48px;
+  line-height: 1.08;
+  letter-spacing: -1.8px;
+  margin-bottom: 17px;
+}
+.promo-intro h1 em {
+  color: #bd4934;
+}
+.promo-intro > p:not(.eyebrow) {
+  font-size: 12px;
+  color: #7b846c;
+  max-width: 540px;
+  margin: 0 auto 10px;
+  line-height: 1.7;
+}
+.promo-scene {
+  height: 360px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 8px;
+  isolation: isolate;
+}
+.promo-world {
+  position: absolute;
+  width: 1150px;
+  height: 350px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%) scale(1.18);
+  transform-origin: 50% 70%;
+  transition: transform 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.promo-stage-2 .promo-world,
+.promo-stage-3 .promo-world {
+  transform: translateX(-50%) scale(0.88);
+}
+.promo-guest {
+  position: absolute;
+  width: 165px;
+  height: 207px;
+  top: 38px;
+}
+.promo-guest svg,
+.promo-spare-chair svg {
+  width: 100%;
+  height: 100%;
+}
+.promo-main-chair,
+.promo-main-guest {
+  left: 492px;
+  z-index: 2;
+}
+.promo-main-chair {
+  z-index: 1;
+}
+.promo-main-guest {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s;
+}
+.promo-stage-1 .promo-main-guest,
+.promo-stage-2 .promo-main-guest,
+.promo-stage-3 .promo-main-guest {
+  opacity: 1;
+  transform: translateY(0);
+}
+.promo-main-chair {
+  transition: transform 0.8s ease;
+  transform: translateY(9px) rotate(-3deg);
+}
+.promo-stage-1 .promo-main-chair,
+.promo-stage-2 .promo-main-chair,
+.promo-stage-3 .promo-main-chair {
+  transform: translateY(0) rotate(0);
+}
+.promo-left-neighbor {
+  left: 275px;
+  opacity: 0;
+  transition: opacity 0.8s 0.3s;
+  z-index: 2;
+}
+.promo-right-neighbor {
+  left: 865px;
+  opacity: 0;
+  transition: opacity 0.8s 0.3s;
+  z-index: 2;
+}
+.promo-spare-chair {
+  position: absolute;
+  top: 49px;
+  left: 686px;
+  width: 150px;
+  height: 188px;
+  opacity: 0;
+  transition: opacity 0.8s 0.3s;
+  z-index: 1;
+}
+.promo-stage-2 .promo-left-neighbor,
+.promo-stage-3 .promo-left-neighbor,
+.promo-stage-2 .promo-right-neighbor,
+.promo-stage-3 .promo-right-neighbor,
+.promo-stage-2 .promo-spare-chair,
+.promo-stage-3 .promo-spare-chair {
+  opacity: 1;
+}
+.promo-gingham {
+  position: absolute;
+  top: 221px;
+  left: -200px;
+  right: -200px;
+  height: 100px;
+  z-index: 3;
+  border-top: 2px solid #7f654d;
+  border-bottom: 2px solid #7f654d;
+  transform: rotate(-2deg);
+  background-color: #f1ddc4;
+  background-image:
+    linear-gradient(90deg, #bf745b40 50%, transparent 50%),
+    linear-gradient(#bf745b40 50%, transparent 50%);
+  background-size: 31px 31px;
+}
+.promo-food {
+  position: absolute;
+  z-index: 4;
+  left: 514px;
+  top: 226px;
+  width: 117px;
+  height: 74px;
+  opacity: 0;
+  transform: translateY(-9px);
+  transition:
+    opacity 0.5s 0.2s,
+    transform 0.7s 0.2s;
+}
+.promo-food svg,
+.promo-other-food svg,
+.promo-flowers svg {
+  width: 100%;
+  height: 100%;
+}
+.promo-stage-1 .promo-food,
+.promo-stage-2 .promo-food,
+.promo-stage-3 .promo-food {
+  opacity: 1;
+  transform: translateY(0);
+}
+.promo-flowers {
+  position: absolute;
+  left: 647px;
+  top: 185px;
+  width: 64px;
+  height: 90px;
+  z-index: 4;
+  transform: rotate(6deg);
+}
+.promo-other-food {
+  position: absolute;
+  left: 298px;
+  top: 233px;
+  width: 100px;
+  height: 65px;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.promo-stage-2 .promo-other-food,
+.promo-stage-3 .promo-other-food {
+  opacity: 1;
+}
+.promo-invitation {
+  position: absolute;
+  left: 732px;
+  top: 239px;
+  z-index: 5;
+  background: #fff7e0;
+  border: 1px solid #9b987c;
+  padding: 15px 17px;
+  box-shadow: 3px 5px #5c54372b;
+  font-family: var(--serif, Georgia, serif);
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: center;
+  transform: translateX(18px) rotate(12deg);
+  opacity: 0;
+  transition:
+    opacity 0.6s,
+    transform 0.8s;
+}
+.promo-stage-3 .promo-invitation {
+  opacity: 1;
+  transform: translateX(0) rotate(8deg);
+}
+.promo-scene-label {
+  position: absolute;
+  bottom: 5px;
+  left: 5%;
+  right: 5%;
+  text-align: center;
+  font-size: 7px;
+  letter-spacing: 1.4px;
+  color: #818b70;
+}
+.promo-story-caption {
+  text-align: center;
+  font-family: var(--serif, Georgia, serif);
+  font-style: italic;
+  font-size: 21px;
+  color: #727f5f;
+  margin: 4px 0 25px;
+}
+.promo-controls {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.promo-play-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.promo-stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 28px;
+  border-top: 1px solid #d3dac5;
+  padding-top: 20px;
+}
+.promo-stages button {
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: left;
+  padding: 8px 0;
+  color: #7f896f;
+}
+.promo-stages button[aria-pressed="true"] {
+  color: #bd4934;
+}
+.promo-stages span {
+  display: block;
+  font-family: var(--serif, Georgia, serif);
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+.promo-controls > p,
+.promo-controls details {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #738062;
+  margin-top: 22px;
+}
+.promo-controls summary {
+  cursor: pointer;
+  color: var(--ink, #303b2e);
+  font-weight: 600;
+}
+.promo-controls details li {
+  margin: 7px 0;
+}
+.recording .promo-header > a {
+  visibility: hidden;
+}
+.recording .promo-intro {
+  padding-top: 26px;
+}
+.recording .promo-scene {
+  height: 400px;
+}
+.recording .promo-story-caption {
+  font-size: 24px;
+}
+.promo-reduced * {
+  animation: none !important;
+  transition: none !important;
+}
+[data-paused="true"].promo-studio * {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .promo-studio * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media (max-width: 760px) {
+  .promo-header {
+    height: auto;
+    min-height: 82px;
+    padding: 14px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .promo-header > a {
+    margin-right: auto;
+    font-size: 10px;
+  }
+  .promo-header > span:nth-child(2) {
+    font-size: 17px;
+  }
+  .promo-demo-label {
+    font-size: 7px;
+  }
+  .promo-intro {
+    padding-top: 29px;
+  }
+  .promo-intro h1 {
+    font-size: 35px;
+    letter-spacing: -1.2px;
+  }
+  .promo-intro > p:not(.eyebrow) {
+    font-size: 11px;
+  }
+  .promo-scene {
+    height: 280px;
+  }
+  .promo-world {
+    top: -12px;
+    transform: translateX(-50%) scale(0.95);
+  }
+  .promo-stage-2 .promo-world,
+  .promo-stage-3 .promo-world {
+    transform: translateX(-50%) scale(0.53);
+  }
+  .promo-scene-label {
+    font-size: 6px;
+  }
+  .promo-stages {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .promo-story-caption {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+  .recording .promo-header > a {
+    display: none;
+  }
+  .recording .promo-header {
+    justify-content: space-between;
+  }
+  .recording .promo-intro h1 {
+    font-size: 31px;
+  }
+  .recording .promo-scene {
+    height: 270px;
+  }
+  .recording .promo-story-caption {
+    font-size: 18px;
+  }
+}

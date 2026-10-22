@@ -1,0 +1,317 @@
+.arrival-moment {
+  width: 100%;
+  max-width: 100%;
+  background: var(--paper, #f6f2e8);
+}
+.arrival-scene {
+  height: 275px;
+  position: relative;
+  background: #e2e6d0;
+  overflow: hidden;
+  border-bottom: 1px solid #b9c3a5;
+}
+.arrival-seat-label {
+  position: absolute;
+  left: 22px;
+  top: 21px;
+  font-size: 8px;
+  letter-spacing: 1.6px;
+  z-index: 5;
+}
+.arrival-chair,
+.arrival-guest,
+.arrival-neighbor {
+  position: absolute;
+  width: 155px;
+  height: 194px;
+  bottom: 50px;
+  left: calc(50% - 150px);
+}
+.arrival-chair svg,
+.arrival-guest svg,
+.arrival-neighbor svg {
+  width: 100%;
+  height: 100%;
+}
+.arrival-chair {
+  z-index: 1;
+}
+.arrival-guest {
+  z-index: 2;
+}
+.arrival-neighbor {
+  left: calc(50% + 28px);
+  z-index: 1;
+  transform: rotate(4deg);
+}
+.arrival-table {
+  position: absolute;
+  left: -25px;
+  right: -25px;
+  height: 96px;
+  bottom: -17px;
+  z-index: 3;
+  border-top: 2px solid #7c6049;
+  background-color: #eddbc0;
+  background-image:
+    linear-gradient(90deg, #c7785f3a 50%, transparent 50%),
+    linear-gradient(#c7785f3a 50%, transparent 50%);
+  background-size: 27px 27px;
+  transform: rotate(-3deg);
+}
+.arrival-dish {
+  position: absolute;
+  z-index: 4;
+  width: 106px;
+  height: 67px;
+  left: calc(50% - 126px);
+  bottom: 7px;
+}
+.arrival-dish svg {
+  width: 100%;
+  height: 100%;
+}
+.arrival-flowers {
+  position: absolute;
+  z-index: 4;
+  width: 60px;
+  height: 84px;
+  bottom: 25px;
+  left: calc(50% - 15px);
+  transform: rotate(7deg);
+}
+.arrival-flowers svg {
+  width: 100%;
+  height: 100%;
+}
+.arrival-napkin {
+  position: absolute;
+  z-index: 5;
+  bottom: 14px;
+  left: calc(50% + 70px);
+  width: 83px;
+  min-height: 54px;
+  padding: 11px 5px;
+  background: #fbf4de;
+  border: 1px solid #a19a7c;
+  box-shadow: 2px 4px #5f573b1c;
+  transform: rotate(10deg);
+  font-family: var(--serif, Georgia, serif);
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.1;
+}
+.arrival-copy {
+  padding: 26px 30px 30px;
+}
+.arrival-copy h2 {
+  font-family: var(--serif, Georgia, serif);
+  font-size: 40px;
+  letter-spacing: -1.5px;
+  line-height: 1.06;
+  margin: 0 0 12px;
+}
+.arrival-copy h2 em {
+  color: var(--tomato, #bd4934);
+}
+.arrival-copy > .eyebrow {
+  font-size: 8px;
+  margin-bottom: 13px;
+}
+.arrival-subtitle {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.arrival-review-note {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #788168;
+  margin-bottom: 21px;
+}
+.arrival-invite-explainer {
+  font-size: 11px;
+  line-height: 1.75;
+  padding: 15px 0;
+  border-top: 1px solid #d2d8c5;
+  border-bottom: 1px solid #d2d8c5;
+  margin-bottom: 20px;
+}
+.arrival-invite-explainer strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.arrival-invite-kind {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.arrival-share {
+  padding-top: 5px;
+}
+.arrival-share .field {
+  font-size: 11px;
+}
+.arrival-share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.arrival-share-actions .btn {
+  font-size: 10px;
+  min-height: 41px;
+  padding: 10px 12px;
+}
+.arrival-return {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 23px;
+  border-top: 1px solid #d8ddcb;
+  padding-top: 14px;
+}
+.arrival-return > .text-link {
+  font-size: 10px;
+}
+.arrival-check {
+  padding: 45px 30px;
+  text-align: center;
+}
+.arrival-check > svg {
+  margin: auto;
+  color: #72835b;
+}
+.arrival-check h2 {
+  font-size: 29px;
+  margin-top: 20px;
+}
+.arrival-check > p {
+  font-size: 12px;
+  color: #6f795f;
+}
+.arrival-check > .text-link {
+  display: block;
+  margin-top: 15px;
+}
+.arrival-motion .arrival-chair {
+  animation: arrival-chair-in 0.8s ease both;
+}
+.arrival-motion .arrival-guest {
+  animation: arrival-guest-in 1s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.arrival-motion .arrival-dish {
+  animation: arrival-dish-in 0.8s 0.7s ease both;
+}
+.arrival-motion .arrival-napkin {
+  animation: arrival-napkin-in 0.7s 1s ease both;
+}
+@keyframes arrival-chair-in {
+  from {
+    transform: translateY(12px) rotate(-3deg);
+  }
+  to {
+    transform: translateY(0) rotate(0);
+  }
+}
+@keyframes arrival-guest-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes arrival-dish-in {
+  from {
+    opacity: 0;
+    transform: translateY(-9px) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+@keyframes arrival-napkin-in {
+  from {
+    opacity: 0;
+    transform: translateX(15px) rotate(14deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(10deg);
+  }
+}
+[data-motion="off"] .arrival-moment *,
+.arrival-still * {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .arrival-moment * {
+    animation: none !important;
+  }
+}
+@media (max-width: 760px) {
+  .arrival-scene {
+    height: 220px;
+  }
+  .arrival-chair,
+  .arrival-guest,
+  .arrival-neighbor {
+    width: 125px;
+    height: 157px;
+    bottom: 44px;
+    left: calc(50% - 127px);
+  }
+  .arrival-neighbor {
+    left: calc(50% + 18px);
+  }
+  .arrival-table {
+    height: 78px;
+  }
+  .arrival-dish {
+    width: 89px;
+    height: 56px;
+    left: calc(50% - 110px);
+    bottom: 2px;
+  }
+  .arrival-flowers {
+    height: 70px;
+    width: 48px;
+    left: calc(50% - 21px);
+    bottom: 16px;
+  }
+  .arrival-napkin {
+    width: 70px;
+    font-size: 10px;
+    left: calc(50% + 50px);
+    bottom: 8px;
+    min-height: 48px;
+  }
+  .arrival-copy {
+    padding: 25px 22px;
+  }
+  .arrival-copy h2 {
+    font-size: 34px;
+  }
+  .arrival-return {
+    flex-wrap: wrap;
+  }
+  .arrival-share-actions .btn {
+    font-size: 11px;
+  }
+  .arrival-review-note {
+    font-size: 11px;
+  }
+  .arrival-invite-explainer {
+    font-size: 12px;
+  }
+  .arrival-share .input {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,90 @@
+.guest-art,
+.dish-art,
+.decoration-art,
+.empty-chair-art {
+  display: block;
+  overflow: visible;
+  flex-shrink: 0;
+}
+.guest-art {
+  isolation: isolate;
+}
+.guest-eyes {
+  animation: guest-blink 9.5s var(--guest-delay, 0s) infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.dish-steam {
+  animation: dinner-steam 4.6s var(--guest-delay, -1s) ease-in-out infinite;
+}
+.candle-flame {
+  transform-origin: 50% 100%;
+  transform-box: fill-box;
+  animation: dinner-flicker 3.7s ease-in-out infinite;
+}
+.guest-straw {
+  animation: dinner-straw 7s var(--guest-delay, 0s) ease-in-out infinite;
+}
+@keyframes guest-blink {
+  0%,
+  43%,
+  46%,
+  100% {
+    transform: scaleY(1);
+  }
+  44%,
+  45% {
+    transform: scaleY(0.07);
+  }
+}
+@keyframes dinner-steam {
+  0%,
+  100% {
+    transform: translateY(1px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 0.7;
+  }
+}
+@keyframes dinner-flicker {
+  0%,
+  100% {
+    transform: rotate(-3deg) scaleX(1);
+    opacity: 0.9;
+  }
+  45% {
+    transform: rotate(4deg) scaleX(0.86);
+    opacity: 1;
+  }
+  70% {
+    transform: rotate(-1deg) scaleX(0.96);
+    opacity: 0.85;
+  }
+}
+@keyframes dinner-straw {
+  0%,
+  65%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  78% {
+    transform: translate(1px, -3px) rotate(-2deg);
+  }
+}
+[data-motion="off"] .guest-art *,
+[data-motion="off"] .dish-art *,
+[data-motion="off"] .decoration-art *,
+[data-paused="true"] .guest-art *,
+[data-paused="true"] .dish-art *,
+[data-paused="true"] .decoration-art * {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .guest-art *,
+  .dish-art *,
+  .decoration-art * {
+    animation: none !important;
+  }
+}
