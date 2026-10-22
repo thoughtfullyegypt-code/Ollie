@@ -1,0 +1,997 @@
+.gift-recipient {
+  --gift-ink: #303a2e;
+  --gift-muted: #6e7763;
+  --gift-red: #ba4732;
+  color: var(--gift-ink);
+  background: #f7f3e8;
+  min-height: 100dvh;
+  padding: 0 max(24px, env(safe-area-inset-right))
+    max(30px, env(safe-area-inset-bottom));
+  overflow-x: clip;
+}
+.gift-reveal-header {
+  max-width: 1180px;
+  margin: 0 auto;
+  min-height: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #d8dacb;
+}
+.gift-reveal-header > a {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 23px;
+  line-height: 1.12;
+  text-decoration: none;
+  color: inherit;
+  max-width: 300px;
+}
+.gift-reveal-header > a i {
+  color: var(--gift-red);
+}
+.gift-reveal-header > span {
+  font-size: 10px;
+  letter-spacing: 2.4px;
+  color: var(--gift-muted);
+}
+.gift-reveal-development {
+  text-align: center;
+  letter-spacing: 1.7px;
+  font-size: 10px;
+  color: #786b4f;
+  margin: 17px 0 0;
+}
+.gift-reveal-main {
+  max-width: 1080px;
+  margin: 0 auto;
+  text-align: center;
+}
+.gift-first-invitation {
+  padding: 40px 20px 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.gift-invitation-envelope {
+  width: 250px;
+  height: 188px;
+  position: relative;
+  margin: 0 auto 24px;
+}
+.gift-invitation-envelope > svg {
+  width: 100%;
+  height: 100%;
+}
+.gift-paper-flower {
+  position: absolute;
+  right: -12px;
+  top: 25px;
+  color: #98a87f;
+  font-size: 33px;
+  transform: rotate(12deg);
+}
+.gift-recipient .eyebrow {
+  font-size: 10px;
+  letter-spacing: 2.1px;
+  line-height: 1.7;
+  color: #66725a;
+  margin: 0 0 17px;
+}
+.gift-first-invitation h1,
+.gift-reveal-scene-heading h1 {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 400;
+  letter-spacing: -2.2px;
+  line-height: 1.06;
+  font-size: clamp(46px, 6.7vw, 78px);
+  margin: 0 auto 22px;
+  max-width: 820px;
+}
+.gift-recipient h1 em,
+.gift-recipient h2 em {
+  font-weight: 400;
+  color: var(--gift-red);
+}
+.gift-from {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--gift-muted);
+  margin: 0 0 25px;
+}
+.gift-from strong {
+  color: var(--gift-ink);
+  font-weight: 500;
+}
+.gift-join {
+  min-width: 180px;
+  justify-content: center;
+  font-size: 14px;
+  min-height: 49px;
+}
+.gift-read-static {
+  min-height: 44px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+.gift-invitation-note {
+  font-size: 12px;
+  color: var(--gift-muted);
+  line-height: 1.7;
+  max-width: 360px;
+  margin-top: 17px;
+}
+.gift-reveal-scene-heading {
+  padding: 38px 12px 0;
+  position: relative;
+}
+.gift-reveal-scene-heading h1 {
+  font-size: clamp(34px, 4.7vw, 54px);
+  letter-spacing: -1.4px;
+  max-width: 800px;
+  margin-bottom: 13px;
+}
+.gift-reveal-scene-heading > p[role="status"] {
+  min-height: 25px;
+  font-size: 14px;
+  color: var(--gift-muted);
+  line-height: 1.8;
+  margin: 0;
+}
+.gift-skip {
+  min-height: 44px;
+  font-size: 13px;
+  margin: 8px auto 0;
+}
+.saved-gift-scene {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 5px auto 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+.saved-gift-camera {
+  height: 385px;
+  position: relative;
+  transform-origin: 50% 75%;
+  width: 100%;
+}
+.saved-gift-chair {
+  position: absolute;
+  z-index: 1;
+  top: 80px;
+  width: 175px;
+  height: 228px;
+}
+.saved-gift-chair > svg {
+  width: 100%;
+  height: 100%;
+}
+.saved-gift-chair.sender {
+  left: calc(32% - 88px);
+}
+.saved-gift-chair.recipient {
+  left: calc(68% - 88px);
+}
+.saved-gift-guest {
+  position: absolute;
+  width: 215px;
+  height: 260px;
+  top: 15px;
+  z-index: 3;
+  transform-origin: 50% 100%;
+}
+.saved-gift-guest.sender {
+  left: calc(32% - 108px);
+}
+.saved-gift-guest.recipient {
+  left: calc(68% - 108px);
+  opacity: 0;
+  transform: translateY(20px);
+}
+.saved-gift-guest > svg {
+  width: 100%;
+  height: 100%;
+}
+.saved-gift-guest.recipient.is-here {
+  opacity: 1;
+  transform: translateY(0);
+}
+.saved-gift-cloth {
+  position: absolute;
+  z-index: 4;
+  left: -20%;
+  right: -20%;
+  height: 138px;
+  top: 232px;
+  background-color: #edcfb7;
+  background-image:
+    linear-gradient(90deg, #bd705438 50%, transparent 50%),
+    linear-gradient(#bd705438 50%, transparent 50%);
+  background-size: 42px 42px;
+  border-top: 3px solid #96735a;
+  border-bottom: 1px solid #c1987e;
+  transform: rotate(-3deg);
+}
+.saved-gift-plate {
+  position: absolute;
+  z-index: 5;
+  width: 140px;
+  height: 76px;
+  top: 268px;
+}
+.saved-gift-plate > svg {
+  width: 100%;
+  height: 100%;
+}
+.saved-gift-plate.sender {
+  left: calc(30% - 70px);
+}
+.saved-gift-plate.recipient {
+  left: calc(69% - 70px);
+  top: 252px;
+  transform: rotate(6deg);
+}
+.saved-gift-dish {
+  position: absolute;
+  z-index: 6;
+  left: calc(30% - 56px);
+  top: 242px;
+  width: 128px;
+  height: 94px;
+  transform: rotate(-4deg);
+}
+.saved-gift-dish > svg {
+  width: 100%;
+  height: 100%;
+}
+.saved-gift-candle {
+  position: absolute;
+  z-index: 6;
+  left: 47%;
+  top: 246px;
+  width: 45px;
+  height: 104px;
+}
+.saved-gift-candle > svg {
+  width: 100%;
+  height: 100%;
+}
+.saved-gift-occasion {
+  position: absolute;
+  z-index: 7;
+  right: 7%;
+  top: 185px;
+  width: 150px;
+  height: 148px;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.saved-gift-occasion > svg {
+  width: 100%;
+  height: 100%;
+}
+.saved-gift-occasion.is-here {
+  opacity: 1;
+  transform: translateY(0);
+}
+.saved-gift-letter {
+  position: absolute;
+  z-index: 8;
+  left: calc(69% - 53px);
+  top: 249px;
+  width: 112px;
+  height: 84px;
+  opacity: 0;
+  transform: translateY(-12px) rotate(7deg);
+}
+.saved-gift-letter > svg {
+  width: 100%;
+  height: 100%;
+}
+.saved-gift-letter.is-here {
+  opacity: 1;
+  transform: translateY(0) rotate(7deg);
+}
+.saved-gift-seat-numbers {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 23px;
+  margin: 0;
+  padding: 0 15px 16px;
+  font-size: 10px;
+  letter-spacing: 1.3px;
+  color: #6f745e;
+  line-height: 1.8;
+}
+.saved-gift-seat-numbers > span {
+  font-family: var(--font-display, Georgia, serif);
+  font-style: italic;
+  letter-spacing: 0;
+  font-size: 15px;
+  color: #827252;
+}
+.saved-gift-wave {
+  position: absolute;
+  top: 93px;
+  z-index: 6;
+  font-size: 48px;
+  color: #829270;
+  pointer-events: none;
+}
+.saved-gift-wave.wave-left {
+  left: 40%;
+}
+.saved-gift-wave.wave-right {
+  right: 20%;
+}
+.gift-message-arrival {
+  padding: 8px 20px 25px;
+}
+.gift-message-arrival > p {
+  font-family: var(--font-display, Georgia, serif);
+  font-style: italic;
+  font-size: 21px;
+  color: #76654a;
+  margin: 5px 0 18px;
+}
+.gift-message-arrival > .btn {
+  font-size: 14px;
+  min-height: 49px;
+}
+.gift-letter-section {
+  max-width: 730px;
+  margin: 12px auto 0;
+}
+.gift-letter-paper {
+  scroll-margin-top: max(20px, env(safe-area-inset-top));
+  position: relative;
+  text-align: left;
+  padding: 45px 60px 30px;
+  background: #fffbef;
+  border: 1px solid #dad5c1;
+  box-shadow: 0 8px 20px #60533a08;
+  transform: rotate(-0.3deg);
+}
+.gift-letter-paper::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid #bfc6a63b;
+  pointer-events: none;
+}
+.gift-letter-heart {
+  display: block;
+  position: absolute;
+  right: 38px;
+  top: 34px;
+  color: var(--gift-red);
+  transform: rotate(10deg);
+}
+.gift-letter-paper .eyebrow {
+  font-size: 9px;
+}
+.gift-letter-paper h2 {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 40px;
+  font-weight: 400;
+  letter-spacing: -0.6px;
+  line-height: 1.15;
+  margin: 0 0 30px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.gift-letter-paper h2:focus {
+  outline: 2px solid #b94b36;
+  outline-offset: 8px;
+}
+.gift-private-message {
+  font-size: 17px;
+  line-height: 1.95;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #394133;
+  min-width: 0;
+}
+.gift-letter-signoff {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 18px;
+  font-style: italic;
+  color: #71805d;
+  line-height: 1.6;
+  margin: 33px 0 20px;
+}
+.gift-letter-paper > .text-link {
+  font-size: 12px;
+  min-height: 44px;
+}
+.gift-after-reveal {
+  padding: 31px 10px 18px;
+}
+.gift-after-reveal > .btn {
+  min-height: 48px;
+  font-size: 14px;
+}
+.gift-thank-you-explanation,
+.gift-preview-explanation,
+.gift-claim-note {
+  font-size: 12px;
+  color: var(--gift-muted);
+  line-height: 1.8;
+  max-width: 530px;
+  margin: 14px auto;
+}
+.gift-after-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.gift-after-controls > .text-link {
+  min-height: 44px;
+  font-size: 12px;
+}
+.gift-thank-you-complete {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #5a6c48;
+  line-height: 1.8;
+  margin: 0;
+}
+.gift-preview-explanation {
+  font-size: 14px;
+  max-width: 540px;
+}
+.gift-claim-panel {
+  position: relative;
+  max-width: 640px;
+  margin: 20px auto;
+  padding: 32px;
+  background: #e7ead7;
+  border: 1px solid #c5ccb1;
+  text-align: left;
+}
+.gift-claim-panel h2 {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 36px;
+  font-weight: 400;
+  letter-spacing: -1px;
+  margin: 0 0 16px;
+}
+.gift-claim-panel > p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #616c55;
+}
+.gift-claim-close {
+  position: absolute;
+  right: 13px;
+  top: 13px;
+}
+.gift-claim-panel .eyebrow {
+  font-size: 9px;
+  margin-bottom: 9px;
+  padding-right: 24px;
+}
+.gift-claim-panel form {
+  display: grid;
+  gap: 13px;
+}
+.gift-claim-panel label {
+  font-size: 13px;
+}
+.gift-claim-panel .input {
+  width: 100%;
+  font-size: 16px;
+  min-height: 48px;
+  max-width: 100%;
+  background: #fffcf3;
+  border: 1px solid #bec5ab;
+  border-radius: 4px;
+  padding: 12px;
+}
+.gift-claim-panel .btn {
+  justify-content: center;
+  font-size: 13px;
+  min-height: 48px;
+}
+.gift-claim-panel form > p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #616c55;
+}
+.gift-dev-link {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #98442f;
+}
+.gift-reveal-footer {
+  border-top: 1px solid #d8dacb;
+  margin: 30px auto 0;
+  padding: 20px 0 5px;
+  max-width: 780px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+.gift-reveal-footer > p {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  line-height: 1.8;
+  color: #7a806c;
+  margin: 0;
+  text-align: left;
+}
+.gift-reveal-footer > button {
+  font-size: 11px;
+  min-height: 44px;
+  white-space: nowrap;
+}
+.gift-reveal-error {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #9e3e2d;
+  background: #f0e4d6;
+  border: 1px solid #d4b8a3;
+  padding: 15px;
+  text-align: left;
+  max-width: 640px;
+  margin: 20px auto;
+}
+.saved-gift-art-fallback {
+  max-width: 420px;
+  margin: 25px auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.saved-gift-art-fallback > svg {
+  width: 220px;
+  max-width: 100%;
+}
+.saved-gift-art-fallback > p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #66725a;
+}
+.gift-scene-animated.gift-scene-arriving .saved-gift-camera {
+  animation: gift-camera-near 2.1s cubic-bezier(0.2, 0.7, 0.35, 1) both;
+}
+.gift-scene-animated.gift-scene-arriving .saved-gift-chair.recipient {
+  animation: gift-chair-out 1.5s ease both;
+}
+.gift-scene-animated.gift-scene-occasion .saved-gift-guest.recipient {
+  animation: gift-guest-seated 1s cubic-bezier(0.22, 0.75, 0.4, 1) both;
+}
+.gift-scene-animated.gift-scene-occasion .saved-gift-occasion {
+  animation: gift-prop-arrival 1s 0.4s ease both;
+}
+.gift-scene-animated.gift-scene-message .saved-gift-letter {
+  animation: gift-letter-arrival 0.65s ease both;
+}
+.gift-scene-animated .gift-candle-flames {
+  transform-origin: 50% 80%;
+  animation: gift-flame 3.4s ease-in-out infinite;
+}
+.gift-scene-animated .gift-wave-hand {
+  transform-origin: 55% 90%;
+  animation: gift-wave 2s ease-in-out 2;
+}
+.gift-scene-animated .saved-gift-wave {
+  animation: gift-wave-marks 2s ease-in-out 2;
+}
+.gift-recipient:not(.gift-reveal-static) .gift-letter-paper {
+  animation: gift-letter-unfold 0.5s ease both;
+}
+@keyframes gift-camera-near {
+  from {
+    transform: scale(0.84) translateX(7%);
+    opacity: 0.45;
+  }
+  to {
+    transform: scale(1) translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes gift-chair-out {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(11px) rotate(2deg);
+  }
+}
+@keyframes gift-guest-seated {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes gift-prop-arrival {
+  from {
+    opacity: 0;
+    transform: translateY(-13px) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+@keyframes gift-letter-arrival {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) rotate(-3deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(7deg);
+  }
+}
+@keyframes gift-flame {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scaleY(0.87);
+  }
+}
+@keyframes gift-wave {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(9deg);
+  }
+}
+@keyframes gift-wave-marks {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: rotate(8deg);
+    opacity: 0.9;
+  }
+}
+@keyframes gift-letter-unfold {
+  from {
+    opacity: 0.1;
+    transform: translateY(9px) rotate(-1deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-0.3deg);
+  }
+}
+.gift-recipient[data-paused="true"] *,
+.gift-recipient[data-offscreen="true"] * {
+  animation-play-state: paused !important;
+}
+.gift-reveal-static *,
+.gift-scene-still * {
+  animation: none !important;
+  transition: none !important;
+}
+.gift-reveal-static .saved-gift-guest.recipient.is-here,
+.gift-reveal-static .saved-gift-occasion.is-here,
+.gift-reveal-static .saved-gift-letter.is-here {
+  opacity: 1 !important;
+}
+.gift-recipient-preview {
+  min-height: 0;
+  padding-bottom: 16px;
+}
+.gift-recipient-preview .gift-reveal-header {
+  min-height: 68px;
+}
+.gift-recipient-preview .gift-reveal-header > .text-link {
+  min-height: 44px;
+  font-size: 12px;
+}
+.gift-recipient-preview .gift-reveal-header > span {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+}
+.gift-recipient-preview .gift-first-invitation {
+  padding-top: 28px;
+}
+.gift-recipient-preview .gift-first-invitation h1 {
+  font-size: 58px;
+}
+.gift-recipient-preview .gift-invitation-envelope {
+  width: 210px;
+  height: 158px;
+  margin-bottom: 20px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gift-recipient * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .saved-gift-guest.recipient.is-here,
+  .saved-gift-occasion.is-here,
+  .saved-gift-letter.is-here {
+    opacity: 1 !important;
+  }
+}
+@media (max-width: 760px) {
+  .gift-recipient {
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
+  }
+  .gift-reveal-header {
+    min-height: 76px;
+    gap: 12px;
+  }
+  .gift-reveal-header > a {
+    font-size: 18px;
+    max-width: 160px;
+  }
+  .gift-reveal-header > span {
+    max-width: 100px;
+    text-align: right;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    line-height: 1.8;
+  }
+  .gift-first-invitation {
+    padding: 34px 0 5px;
+  }
+  .gift-invitation-envelope {
+    width: 220px;
+    height: 165px;
+    margin-bottom: 24px;
+  }
+  .gift-recipient .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.7px;
+  }
+  .gift-first-invitation h1,
+  .gift-recipient-preview .gift-first-invitation h1 {
+    font-size: clamp(42px, 11.9vw, 59px);
+    letter-spacing: -1.7px;
+  }
+  .gift-from {
+    font-size: 15px;
+    margin-bottom: 22px;
+  }
+  .gift-reveal-scene-heading {
+    padding: 27px 0 0;
+  }
+  .gift-reveal-scene-heading h1 {
+    font-size: 32px;
+    letter-spacing: -1px;
+  }
+  .gift-reveal-scene-heading > p[role="status"] {
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 330px;
+    margin: auto;
+  }
+  .saved-gift-scene {
+    width: calc(100% + 36px);
+    margin-left: -18px;
+    max-width: none;
+  }
+  .saved-gift-camera {
+    height: 320px;
+    transform-origin: 50% 80%;
+  }
+  .saved-gift-chair {
+    width: 128px;
+    height: 174px;
+    top: 92px;
+  }
+  .saved-gift-chair.sender {
+    left: calc(27% - 64px);
+  }
+  .saved-gift-chair.recipient {
+    left: calc(72% - 64px);
+  }
+  .saved-gift-guest {
+    width: 160px;
+    height: 215px;
+    top: 32px;
+  }
+  .saved-gift-guest.sender {
+    left: calc(27% - 80px);
+  }
+  .saved-gift-guest.recipient {
+    left: calc(72% - 80px);
+  }
+  .saved-gift-cloth {
+    height: 116px;
+    top: 222px;
+    background-size: 30px 30px;
+  }
+  .saved-gift-plate {
+    width: 100px;
+    height: 55px;
+    top: 250px;
+  }
+  .saved-gift-plate.sender {
+    left: calc(25% - 50px);
+  }
+  .saved-gift-plate.recipient {
+    left: calc(73% - 50px);
+    top: 236px;
+  }
+  .saved-gift-dish {
+    left: calc(25% - 43px);
+    top: 233px;
+    width: 98px;
+    height: 71px;
+  }
+  .saved-gift-candle {
+    left: 44%;
+    top: 244px;
+    width: 30px;
+    height: 66px;
+  }
+  .saved-gift-occasion {
+    right: 0;
+    top: 180px;
+    width: 102px;
+    height: 105px;
+  }
+  .saved-gift-letter {
+    left: calc(73% - 42px);
+    top: 236px;
+    width: 89px;
+    height: 67px;
+  }
+  .saved-gift-seat-numbers {
+    font-size: 9px;
+    gap: 12px;
+    letter-spacing: 0.8px;
+    flex-wrap: wrap;
+    padding-bottom: 5px;
+  }
+  .saved-gift-seat-numbers > span {
+    font-size: 13px;
+  }
+  .saved-gift-wave {
+    font-size: 31px;
+    top: 100px;
+  }
+  .saved-gift-wave.wave-left {
+    left: 39%;
+  }
+  .saved-gift-wave.wave-right {
+    right: 11%;
+  }
+  .gift-message-arrival {
+    padding: 18px 0 13px;
+  }
+  .gift-message-arrival > p {
+    font-size: 20px;
+  }
+  .gift-letter-section {
+    margin-top: 18px;
+  }
+  .gift-letter-paper {
+    padding: 35px 25px 24px;
+    transform: none;
+  }
+  .gift-letter-paper::before {
+    inset: 7px;
+  }
+  .gift-letter-paper h2 {
+    font-size: 32px;
+    line-height: 1.18;
+    margin-bottom: 24px;
+  }
+  .gift-letter-heart {
+    right: 24px;
+    top: 23px;
+  }
+  .gift-letter-heart svg {
+    width: 19px;
+  }
+  .gift-private-message {
+    font-size: 16px;
+    line-height: 1.9;
+  }
+  .gift-letter-signoff {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-top: 26px;
+  }
+  .gift-after-reveal {
+    padding: 25px 0 12px;
+  }
+  .gift-after-controls {
+    column-gap: 21px;
+    row-gap: 4px;
+    margin-top: 14px;
+  }
+  .gift-after-controls > .text-link {
+    font-size: 12px;
+  }
+  .gift-thank-you-explanation,
+  .gift-preview-explanation,
+  .gift-claim-note {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .gift-claim-panel {
+    padding: 28px 21px;
+    margin: 14px 0;
+  }
+  .gift-claim-panel h2 {
+    font-size: 30px;
+  }
+  .gift-claim-panel .btn {
+    font-size: 12px;
+    white-space: normal;
+  }
+  .gift-reveal-footer {
+    margin-top: 25px;
+    align-items: flex-start;
+    padding-bottom: 0;
+  }
+  .gift-reveal-footer > p {
+    font-size: 7px;
+    letter-spacing: 1.2px;
+    max-width: 185px;
+  }
+  .gift-reveal-footer > button {
+    font-size: 10px;
+    min-height: 44px;
+  }
+  .gift-recipient-preview .gift-reveal-header {
+    min-height: 61px;
+  }
+  .gift-recipient-preview .gift-reveal-header > span {
+    max-width: 90px;
+  }
+  .gift-recipient-preview .gift-first-invitation {
+    padding-top: 24px;
+  }
+  .gift-recipient-preview .gift-invitation-envelope {
+    width: 200px;
+    height: 150px;
+  }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .gift-reveal-header {
+    min-height: 64px;
+  }
+  .gift-first-invitation {
+    padding-top: 15px;
+  }
+  .gift-invitation-envelope {
+    width: 150px;
+    height: 110px;
+    margin-bottom: 10px;
+  }
+  .gift-first-invitation h1 {
+    font-size: 46px;
+  }
+  .gift-reveal-scene-heading {
+    padding-top: 23px;
+  }
+}

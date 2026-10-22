@@ -1,0 +1,51 @@
+{
+  "measuredAt": "2026-10-22T23:46:51.416Z",
+  "environment": "Local optimized Next.js server, headless system Chromium. Fresh browser contexts. Mobile is emulation with 4x CPU throttling, not physical Safari or a real phone. Frame timing is an indicative local measurement during keyboard panning, not a guarantee.",
+  "budgets": {
+    "maxInitialEncodedJavascriptBytes": 512000,
+    "maxMountedTableColumns": 20,
+    "indicativeLocalP95FrameMs": 34
+  },
+  "results": [
+    {
+      "label": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "cpu": 1,
+      "navigationLoadMs": 358,
+      "lcpMs": 396,
+      "initialJsRequests": 13,
+      "initialJsEncodedBytes": 222100,
+      "initialJsTransferBytes": 226000,
+      "initialTableColumns": 11,
+      "initialGuestSvgNodes": 22,
+      "documentScrollWidth": 1440,
+      "viewportWidth": 1440,
+      "panningAnimationFrames": 67,
+      "panningFrameMedianMs": 16.7,
+      "panningFrameP95Ms": 16.8,
+      "panningMaxFrameMs": 33.4,
+      "mountedColumnsAfterPanning": 13
+    },
+    {
+      "label": "mobile-emulation-4x-cpu",
+      "width": 390,
+      "height": 844,
+      "cpu": 4,
+      "navigationLoadMs": 675,
+      "lcpMs": 408,
+      "initialJsRequests": 13,
+      "initialJsEncodedBytes": 222100,
+      "initialJsTransferBytes": 226000,
+      "initialTableColumns": 6,
+      "initialGuestSvgNodes": 12,
+      "documentScrollWidth": 390,
+      "viewportWidth": 390,
+      "panningAnimationFrames": 87,
+      "panningFrameMedianMs": 16.7,
+      "panningFrameP95Ms": 33.4,
+      "panningMaxFrameMs": 50.1,
+      "mountedColumnsAfterPanning": 8
+    }
+  ]
+}
