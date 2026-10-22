@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
@@ -1101,6 +1102,23 @@ export default function PurchaseFlow({
                 {!settings && (
                   <p className="muted">Fetching the current seating prices…</p>
                 )}
+                {packageId === "two" && (
+                  <aside className="builder-gift-option">
+                    <strong>A little surprise for someone?</strong>
+                    <p>
+                      The personalized gift experience is included in this
+                      two-seat package. Create their suggested guest and tuck a
+                      private letter beside them.
+                    </p>
+                    <Link
+                      href="/save-a-seat?from=builder"
+                      className="text-link"
+                    >
+                      Save a seat for someone <ArrowUpRight size={15} />
+                    </Link>
+                  </aside>
+                )}
+
                 <div className="exact-seat-review" aria-live="polite">
                   <span>YOUR EXACT SEATS</span>
                   <strong>

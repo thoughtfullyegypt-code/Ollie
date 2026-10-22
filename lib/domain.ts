@@ -3,11 +3,15 @@ import type { PoolClient } from "pg";
 import { z } from "zod";
 import { pool, transaction } from "./db";
 import { attributionSchema, recordJourneyEvent } from "./analytics";
-import {
-  isStaleDonationDisputeEvent,
-  syncDonationForOrder,
-} from "./donations";
+import { isStaleDonationDisputeEvent, syncDonationForOrder } from "./donations";
 import { NEIGHBORHOODS } from "./db/migrate";
+import {
+  giftCheckoutExisting,
+  validateGiftCheckout,
+  attachGiftOrder,
+  syncGiftLifecycle,
+  invalidateSenderGifts,
+} from "./gift-lifecycle";
 
 export const PACKAGES = [
   { id: "one", label: "A seat for you", count: 1, amount: 500 },
@@ -198,7 +202,7 @@ function guest(r: Row): PublicGuest {
     celebration: !!r.celebration,
   };
 }
-function order(r: Row): Row {
+function order(r: Row) {
   return {
     id: r.id,
     userId: r.user_id,
@@ -214,6 +218,7 @@ function order(r: Row): Row {
     isDemo: r.is_demo,
     taxMinor: Number(r.tax_minor || 0),
     settledAt: asDate(r.settled_at),
+    giftId: r.gift_id || null,
   };
 }
 function invitation(r: Row): InvitationRecord {
@@ -446,14 +451,38 @@ export async function createOrder(
     provider?: "stripe" | "development";
     expectedAmount?: number;
     attribution?: unknown;
+    giftId?: string;
   },
 ) {
-  const profile = profileSchema.parse(input.profile);
+  let profile = profileSchema.parse(input.profile);
   const attribution = attributionSchema.parse(input.attribution || {});
   return transaction(async (c) => {
     await inventoryLock(c);
     await verified(c, userId);
     await expireCourtesy(c);
+    if (input.giftId) {
+      const existing = await giftCheckoutExisting(
+        c,
+        userId,
+        input.giftId,
+        input.packageId,
+        input.seatIds,
+        input.expectedAmount,
+      );
+      if (existing)
+        return {
+          ...order(existing),
+          checkoutExpiresAt: asDate(existing.checkout_expires_at)!,
+        };
+      const gift = await validateGiftCheckout(
+        c,
+        userId,
+        input.giftId,
+        input.packageId,
+        input.seatIds,
+      );
+      profile = profileSchema.parse(gift.profile);
+    }
     const p = await selectedPackage(c, input.packageId);
     if (input.expectedAmount !== undefined && input.expectedAmount !== p.amount)
       fail(
@@ -574,6 +603,7 @@ export async function createOrder(
         courtesy.id,
       ]);
     }
+    if (input.giftId) await attachGiftOrder(c, input.giftId, userId, id);
     await audit(c, userId, "checkout.started", id, {
       seatIds: ids,
       amount: p.amount,
@@ -919,6 +949,9 @@ export async function handlePaymentEvent(event: {
             : undefined,
         occurredAt: event.occurredAt,
       });
+    await syncGiftLifecycle(c, o.id, {
+      paymentConfirmed: type === "paid" && outcome === "fulfilled",
+    });
     if (type === "paid" && outcome === "fulfilled")
       await recordJourneyEvent(c, {
         name: "order_fulfilled",
@@ -1000,7 +1033,7 @@ export async function getOwnerData(userId: string) {
     const [s, o, i, supportRows] = await readSequential([
       () =>
         c.query(
-          `SELECT s.id,s.state,owner_order.package_id,owner_order.user_id AS buyer_id,(SELECT min(seat_id) FROM order_items WHERE order_id=s.order_id) AS primary_seat_id,n.name AS neighborhood,p.*,s.neighborhood_id,(SELECT package_id='celebration' FROM orders o WHERE o.id=s.order_id) AS celebration,(SELECT count(*) FROM reactions r WHERE r.seat_id=s.id) AS reaction_count FROM seats s JOIN orders owner_order ON owner_order.id=s.order_id JOIN neighborhoods n ON n.id=s.neighborhood_id LEFT JOIN profiles p ON p.seat_id=s.id WHERE s.owner_id=$1 ORDER BY s.id`,
+          `SELECT s.id,s.state,EXISTS(SELECT 1 FROM gifts g WHERE g.recipient_seat_id=s.id AND g.claimed_by IS NULL AND g.status IN ('ready','awaiting_payment')) AS gift_reserved,owner_order.package_id,owner_order.user_id AS buyer_id,(SELECT min(seat_id) FROM order_items WHERE order_id=s.order_id) AS primary_seat_id,n.name AS neighborhood,p.*,s.neighborhood_id,(SELECT package_id='celebration' FROM orders o WHERE o.id=s.order_id) AS celebration,(SELECT count(*) FROM reactions r WHERE r.seat_id=s.id) AS reaction_count FROM seats s JOIN orders owner_order ON owner_order.id=s.order_id JOIN neighborhoods n ON n.id=s.neighborhood_id LEFT JOIN profiles p ON p.seat_id=s.id WHERE s.owner_id=$1 ORDER BY s.id`,
           [userId],
         ),
       () =>
@@ -1024,8 +1057,10 @@ export async function getOwnerData(userId: string) {
         seatId: r.id,
         state: r.state,
         packageId: r.package_id,
-        canInviteCourtesy: r.package_id === "one",
+        giftReserved: !!r.gift_reserved,
+        canInviteCourtesy: r.package_id === "one" && !r.gift_reserved,
         canInvitePaid:
+          !r.gift_reserved &&
           r.package_id !== "one" &&
           r.buyer_id === userId &&
           r.id !== Number(r.primary_seat_id),
@@ -1062,6 +1097,16 @@ export async function createInvitation(
         "FORBIDDEN",
         "Only the owner of an active seat can invite a friend.",
         403,
+      );
+    const giftReserved = await c.query(
+      "SELECT 1 FROM gifts WHERE recipient_seat_id=$1 AND claimed_by IS NULL AND status IN ('ready','awaiting_payment')",
+      [seatId],
+    );
+    if (giftReserved.rowCount)
+      fail(
+        "GIFT_RESERVED",
+        "Use the gift's separate verified claim process for this chair.",
+        409,
       );
     const recent = await c.query(
       "SELECT count(*)::int AS count FROM invitations WHERE owner_id=$1 AND created_at>now()-interval '24 hours'",
@@ -1268,6 +1313,19 @@ export async function claimInvitation(userId: string, token: string) {
       fail(
         "INVITE_A_FRIEND",
         "This chair already belongs to you. Send the invitation to your friend.",
+      );
+    if (
+      (
+        await c.query(
+          "SELECT 1 FROM gifts WHERE recipient_seat_id=$1 AND status IN ('ready','awaiting_payment')",
+          [i.target_seat_id],
+        )
+      ).rowCount
+    )
+      fail(
+        "GIFT_RESERVED",
+        "This chair is assigned through its gift claim process.",
+        409,
       );
     const seat = await c.query("SELECT * FROM seats WHERE id=$1 FOR UPDATE", [
       i.target_seat_id,
@@ -1746,6 +1804,7 @@ export async function requestAccountDeletion(userId: string) {
           i.id,
         ]);
       }
+    await invalidateSenderGifts(c, userId);
     await audit(c, userId, "account.deletion_requested", userId);
     return {
       id,

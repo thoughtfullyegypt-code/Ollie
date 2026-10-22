@@ -961,3 +961,25 @@
     display: flex;
   }
 }
+
+.builder-gift-option {
+  border-top: 1px solid #d5d8c5;
+  border-bottom: 1px solid #d5d8c5;
+  padding: 16px 0;
+  margin: 15px 0;
+  color: #414a38;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.builder-gift-option > strong {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 20px;
+  font-weight: 500;
+}
+.builder-gift-option > p {
+  margin: 7px 0 12px;
+}
+.builder-gift-option > .text-link {
+  font-size: 12px;
+  min-height: 44px;
+}

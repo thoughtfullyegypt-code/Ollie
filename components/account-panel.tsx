@@ -9,6 +9,7 @@ import {
   Copy,
   ExternalLink,
   HeartHandshake,
+  Gift,
   LoaderCircle,
   LogOut,
   Mail,
@@ -29,6 +30,8 @@ import {
 } from "./art/illustrations";
 import Modal from "./modal";
 import PostPurchaseMoment from "./post-purchase-moment";
+import GiftManagement from "./gift-management";
+import type { GiftRecord } from "@/lib/gift-input";
 import "./account.css";
 
 type Row = Record<string, unknown>;
@@ -96,7 +99,7 @@ async function request(path: string, init?: RequestInit): Promise<Row> {
 // The return URL is only a reason to check. Payment and the exact inventory
 // must both be confirmed by the server before the arrival is shown.
 async function confirmedArrival(order: Row): Promise<Arrival | null> {
-  if (order.status !== "paid") return null;
+  if (order.status !== "paid" || order.giftId) return null;
   const ids = Array.isArray(order.seatIds) ? order.seatIds.map(Number) : [];
   if (
     !ids.length ||
@@ -163,9 +166,17 @@ export default function AccountPanel({
   const [arrivalCandidate, setArrivalCandidate] = useState<string | null>(null);
   const seenArrivals = useRef(new Set<string>());
   const [developmentCheckout, setDevelopmentCheckout] = useState(false);
+  const [giftRecords, setGiftRecords] = useState<GiftRecord[]>([]);
+  const [giftFocusId, setGiftFocusId] = useState<string | null>(null);
   const [section, setSection] = useState<
-    "seats" | "orders" | "invitations" | "help"
+    "seats" | "orders" | "invitations" | "gifts" | "help"
   >("seats");
+  const refreshGifts = useCallback(async () => {
+    const result = await request("/api/gifts");
+    setGiftRecords(
+      Array.isArray(result.gifts) ? (result.gifts as GiftRecord[]) : [],
+    );
+  }, []);
 
   const refresh = useCallback(async () => {
     try {
@@ -191,15 +202,44 @@ export default function AccountPanel({
         orders: arr(body.orders),
         invitations: arr(body.invitations),
       });
+      await refreshGifts().catch(() => {});
     } catch (error) {
       setNotice({ kind: "error", message: (error as Error).message });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [refreshGifts]);
   useEffect(() => {
     void refresh();
   }, [refresh]);
+  useEffect(() => {
+    if (!owner?.user.id) {
+      setGiftRecords([]);
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    const giftId = params.get("gift");
+    if (giftId) {
+      setGiftFocusId(giftId);
+      setSection("gifts");
+    } else if (params.get("section") === "gifts") {
+      setSection("gifts");
+    }
+  }, [owner?.user.id]);
+  useEffect(() => {
+    if (
+      !owner?.user.id ||
+      !giftRecords.some((g) => ["awaiting_payment", "ready"].includes(g.status))
+    )
+      return;
+    const delay = giftRecords.some((g) => g.status === "awaiting_payment")
+      ? 5000
+      : 30000;
+    const timer = setInterval(() => {
+      if (!document.hidden) void refreshGifts().catch(() => {});
+    }, delay);
+    return () => clearInterval(timer);
+  }, [owner?.user.id, giftRecords, refreshGifts]);
   useEffect(() => {
     if (!sent || !email) return;
     let active = true;
@@ -281,6 +321,14 @@ export default function AccountPanel({
           previous?.id === order.id ? order : previous,
         );
         if (order.status === "paid") {
+          if (order.giftId) {
+            rememberArrival(userId, str(order.id));
+            setGiftFocusId(str(order.giftId));
+            setSection("gifts");
+            setArrivalCandidate(null);
+            await refresh();
+            return;
+          }
           const confirmed = await confirmedArrival(order);
           if (!active || !confirmed) return;
           rememberArrival(userId, confirmed.orderId);
@@ -339,6 +387,12 @@ export default function AccountPanel({
     await run(`arrival-${orderId}`, async () => {
       const order = await request(`/api/orders/${encodeURIComponent(orderId)}`);
       setSelectedOrder(order);
+      if (order.giftId) {
+        setGiftFocusId(str(order.giftId));
+        setSection("gifts");
+        await refreshGifts();
+        return;
+      }
       const confirmed = await confirmedArrival(order);
       if (!confirmed)
         throw new Error(
@@ -620,6 +674,9 @@ export default function AccountPanel({
                 </p>
               </div>
               <div className="account-title-actions">
+                <Link className="account-button secondary" href="/save-a-seat">
+                  <Gift size={16} /> Save a seat for someone
+                </Link>
                 {owner.user.role === "admin" && (
                   <Link className="account-button secondary" href="/admin">
                     <Shield size={16} /> Host’s desk
@@ -641,11 +698,31 @@ export default function AccountPanel({
                 </button>
               </div>
             </div>
+            {giftRecords.some((g) => g.thankYouAt) && (
+              <div className="gift-dashboard-thanks">
+                <span>
+                  <strong>A thank-you is waiting at your seat.</strong> Someone
+                  opened one of your little surprises and sent “Thank you ❤️”.
+                </span>
+                <button
+                  className="account-button text"
+                  onClick={() => {
+                    setGiftFocusId(
+                      giftRecords.find((g) => g.thankYouAt)?.id || null,
+                    );
+                    setSection("gifts");
+                  }}
+                >
+                  Read your thank-you <ArrowRight size={15} />
+                </button>
+              </div>
+            )}
             <nav className="account-tabs" aria-label="Account sections">
               {(
                 [
                   ["seats", "Your seats", owner.seats.length],
                   ["invitations", "Invitations", owner.invitations.length],
+                  ["gifts", "Gifts", giftRecords.length],
                   ["orders", "Orders & receipts", owner.orders.length],
                   ["help", "A little help", null],
                 ] as const
@@ -693,8 +770,24 @@ export default function AccountPanel({
                         ? str(seat.packageId) !== "one"
                         : groupSeats.length > 1;
                       const primarySeat = Math.min(...groupSeats) === id;
-                      const canInviteCourtesy = seat.canInviteCourtesy === true;
-                      const canInvitePaid = seat.canInvitePaid === true;
+                      const recipientGiftReserved =
+                        seat.giftReserved === true ||
+                        giftRecords.some(
+                          (g) =>
+                            g.recipientSeatId === id &&
+                            !g.claimedAt &&
+                            ["awaiting_payment", "ready", "revoked"].includes(
+                              g.status,
+                            ),
+                        );
+                      const seatGifts = giftRecords.filter(
+                        (g) => g.senderSeatId === id,
+                      );
+                      const canInviteCourtesy =
+                        seat.canInviteCourtesy === true &&
+                        !recipientGiftReserved;
+                      const canInvitePaid =
+                        seat.canInvitePaid === true && !recipientGiftReserved;
                       return (
                         <article className="owned-seat" key={id}>
                           <div className="owned-portrait">
@@ -726,6 +819,36 @@ export default function AccountPanel({
                               {str(profile.message) ||
                                 "Your story starts with a little introduction."}
                             </p>
+                            {seatGifts
+                              .filter((g) => g.thankYouAt)
+                              .map((g) => (
+                                <p key={g.id} className="gift-seat-thanks">
+                                  Thank you ❤️{" "}
+                                  <span>
+                                    A thank-you arrived for your{" "}
+                                    {g.occasion === "birthday"
+                                      ? "birthday"
+                                      : "dinner"}{" "}
+                                    surprise on {dateLabel(g.thankYouAt)}.
+                                  </span>{" "}
+                                  <button
+                                    className="account-button text"
+                                    onClick={() => {
+                                      setGiftFocusId(g.id);
+                                      setSection("gifts");
+                                    }}
+                                  >
+                                    Open gift details <ArrowRight size={14} />
+                                  </button>
+                                </p>
+                              ))}
+                            {recipientGiftReserved && (
+                              <p className="account-small">
+                                This guest is part of a private saved-seat
+                                surprise. Manage its secure gift link in Gifts;
+                                an ordinary invitation cannot replace it.
+                              </p>
+                            )}
                             <div className="owned-seat-actions">
                               <Link
                                 className="account-button secondary"
@@ -733,6 +856,26 @@ export default function AccountPanel({
                               >
                                 Visit my seat <ExternalLink size={14} />
                               </Link>
+                              {!recipientGiftReserved && (
+                                <Link
+                                  className="account-button text"
+                                  href={`/save-a-seat?sourceSeatId=${id}`}
+                                >
+                                  <Gift size={16} /> Save a seat for someone
+                                </Link>
+                              )}
+                              {seatGifts.length > 0 && (
+                                <button
+                                  className="account-button text"
+                                  onClick={() => {
+                                    setGiftFocusId(seatGifts[0].id);
+                                    setSection("gifts");
+                                  }}
+                                >
+                                  Manage saved-seat surprise{" "}
+                                  <ArrowRight size={15} />
+                                </button>
+                              )}
                               {canInviteCourtesy && (
                                 <button
                                   className="account-button text"
@@ -756,29 +899,31 @@ export default function AccountPanel({
                                 </button>
                               )}
                             </div>
-                            <details className="seat-editor">
-                              <summary>
-                                Customize this guest <Plus size={16} />
-                              </summary>
-                              <SeatEditor
-                                seat={profile}
-                                onSave={async (input) => {
-                                  await run(`save-${id}`, async () => {
-                                    await request(`/api/seats/${id}`, {
-                                      method: "PUT",
-                                      body: JSON.stringify(input),
+                            {!recipientGiftReserved && (
+                              <details className="seat-editor">
+                                <summary>
+                                  Customize this guest <Plus size={16} />
+                                </summary>
+                                <SeatEditor
+                                  seat={profile}
+                                  onSave={async (input) => {
+                                    await run(`save-${id}`, async () => {
+                                      await request(`/api/seats/${id}`, {
+                                        method: "PUT",
+                                        body: JSON.stringify(input),
+                                      });
+                                      setNotice({
+                                        kind: "success",
+                                        message:
+                                          "Your guest is saved. Public edits enter the manual review queue.",
+                                      });
+                                      await refresh();
                                     });
-                                    setNotice({
-                                      kind: "success",
-                                      message:
-                                        "Your guest is saved. Public edits enter the manual review queue.",
-                                    });
-                                    await refresh();
-                                  });
-                                }}
-                                disabled={!!busy}
-                              />
-                            </details>
+                                  }}
+                                  disabled={!!busy}
+                                />
+                              </details>
+                            )}
                           </div>
                         </article>
                       );
@@ -786,6 +931,17 @@ export default function AccountPanel({
                   </div>
                 )}
               </section>
+            )}
+            {section === "gifts" && (
+              <GiftManagement
+                gifts={giftRecords}
+                onRefresh={refreshGifts}
+                focusGiftId={giftFocusId}
+                onViewOrder={(id) => {
+                  setSection("orders");
+                  void viewOrder(id);
+                }}
+              />
             )}
             {section === "invitations" && (
               <section className="account-section">
@@ -1055,7 +1211,15 @@ export default function AccountPanel({
                       disabled={!!busy}
                       onClick={() => void reopenArrival(str(selectedOrder.id))}
                     >
-                      <Users size={16} /> Invite someone beside you
+                      {selectedOrder.giftId ? (
+                        <>
+                          <Gift size={16} /> Manage saved-seat surprise
+                        </>
+                      ) : (
+                        <>
+                          <Users size={16} /> Invite someone beside you
+                        </>
+                      )}
                     </button>
                   )}
                   {str(selectedOrder.status) === "checkout_pending" && (

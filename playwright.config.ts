@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 export default defineConfig({
   testDir: "./tests",
-  testMatch: ["experience.spec.ts", "admin.spec.ts"],
+  testMatch: ["experience.spec.ts", "admin.spec.ts", "gifts.spec.ts"],
   fullyParallel: false,
   workers: 1,
   timeout: 60_000,

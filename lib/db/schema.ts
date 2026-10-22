@@ -113,6 +113,7 @@ export const orders = pgTable("orders", {
     .notNull()
     .references(() => users.id),
   packageId: text("package_id").notNull(),
+  giftId: text("gift_id"),
   amount: integer("amount").notNull(),
   currency: text("currency").notNull().default("usd"),
   status: text("status").notNull(),
@@ -299,3 +300,5 @@ export const authRateLimits = pgTable(
 
 export * from "./donation-schema";
 export * from "./journey-schema";
+
+export * from "./gift-schema";

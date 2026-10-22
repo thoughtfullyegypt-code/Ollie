@@ -18,6 +18,8 @@ export async function migrate() {
       "0002_auth_rate_limits",
       "0003_donations",
       "0004_journey",
+      "0005_gifts",
+      "0006_gift_orders",
     ].map(async (id) => ({
       id,
       sql: await readFile(resolve(process.cwd(), `lib/db/${id}.sql`), "utf8"),

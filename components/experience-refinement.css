@@ -172,3 +172,18 @@
     font-size: 11px;
   }
 }
+
+.hero-gift-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--red, #b7402b);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  min-height: 44px;
+  margin: 0 0 8px;
+}
+.hero-gift-link:hover {
+  color: #843627;
+}

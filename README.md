@@ -103,3 +103,11 @@ Live sales require explicit launch flags (including `TAXES_VERIFIED`) and record
 - [Environment example without secrets](.env.example)
 
 The working name and domain are configurable. No trademark clearance, legal compliance, unprecedented-concept claim, or indefinite service promise is made.
+
+## A Seat Saved for You
+
+Open `/save-a-seat` or choose **Save a seat for someone** on the homepage, two-seat package, or owner account. Create two peculiar guests, choose one of five occasions, and tuck a private letter beside them. The recipient needs no account to read or send the predefined thank-you; claiming the paid guest requires verified sign-in and a separate explicit ownership action.
+
+The gift uses the existing configured pair price, an adjacent single-seat price for eligible owners, or already-owned neighboring seats with no new charge. It preserves the existing order, inventory, webhook, and donation accounting systems. Apply migrations with `npm run db:migrate`; no new external service credential is required. Use the existing clearly labeled development checkout until the normal production launch requirements are verified.
+
+See [gift lifecycle, privacy and setup](docs/GIFTS.md) and [gift verification and screenshots](docs/GIFT_VERIFICATION.md). Gift URLs are bearer secrets. Redact `/gift/*` and token-bearing `/api/gifts/open/*` URLs and bodies in any deployment proxy, analytics, tracing, or error-reporting service. Public metadata and downloadable invitation images contain no letter, recipient name, or claim credential.

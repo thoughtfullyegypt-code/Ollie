@@ -663,6 +663,9 @@ export default function TableExperience({
                 Explore the table <ArrowRight size={16} />
               </button>
             </div>
+            <Link className="hero-gift-link" href="/save-a-seat">
+              Save a seat for someone <Heart size={15} />
+            </Link>
             <p className="hero-pricing">
               {singlePrice && pairPrice ? (
                 <>

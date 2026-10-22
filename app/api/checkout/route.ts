@@ -18,6 +18,7 @@ export async function POST(request: Request) {
         invitationToken: z.string().min(20).max(200).optional(),
         expectedAmount: z.number().int().min(0).max(10000000).optional(),
         attribution: attributionSchema.optional(),
+        giftId: z.string().uuid().optional(),
       })
       .parse(await body(request));
     const provider = checkoutProvider();
